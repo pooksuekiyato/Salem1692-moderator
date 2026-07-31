@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang='th'>
+
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      font-size:20px;
+    }
+
+    button,
+    input,
+    select {
+      padding: 8px;
+      margin: 4px;
+      font-size:20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id='app'></div>
+  <script>
+    let players = ['ปุ๊กกี้', 'โจ๋', 'อีฟ', 'บีม', 'พลอย', 'ซ้ง','บิว', 'อุ๋ม'],
+      victim = '',
+      guard = '',
+      confess = {},
+      i = 0;
+
+    const app = document.getElementById('app');
+
+    function setup() {
+      app.innerHTML = '<h2>ผู้เล่น</h2><ul>'
+        + players.map((p, n) => `<li>${p} <button onclick="players.splice(${n},1);setup()">ลบ</button></li>`).join('')
+        + '</ul>'
+        + '<input id=x>'
+        + '<button onclick="if(x.value){players.push(x.value);setup()}">เพิ่ม</button>'
+        + '<br>'
+        + '<button onclick="witch()">เริ่มเกม</button>';
+    }
+
+    function witch() {
+      app.innerHTML = `<h3>🧙‍♀️แม่มดเลือกเหยื่อ 🧙‍</h3>`
+        + sel("v")
+        + `<br>`
+        + `<button onclick="victim=document.getElementById('v').value;guardPage()">ยืนยัน</button>`;
+    }
+
+    function guardPage() {
+      app.innerHTML = `<h3>😇สายตรวจเลือกปกป้อง😇</h3>`
+        + sel("g")
+        + `<br>`
+        + `<button onclick="guard=document.getElementById('g').value;i=0;confess={};confessPage()">ยืนยัน</button>`;
+    }
+
+    function confessPage() {
+      if (i >= players.length) {
+        return result();
+      }
+      let p = players[i];
+      app.innerHTML = `<h3>ส่งมือถือให้ ${p}</h3>`
+        + `<button onclick="save(true)">🙏 สารภาพ</button>`
+        + `<button onclick="save(false)">❌ ไม่สารภาพ</button>`;
+    }
+
+    function save(v) {
+      confess[players[i]] = v;
+      i++;
+      confessPage();
+    }
+
+    function result() {
+      let text = "คืนนี้ไม่มีผู้เสียชีวิต";
+      if (victim !== guard && confess[victim] === false) {
+        text = "💀 " + victim + " เสียชีวิต";
+      }
+      app.innerHTML = `<h2>${text}</h2>`
+        + `<button onclick="resetGame()">เริ่มคืนใหม่</button>`
+        + `<button onclick="setup()">กลับหน้าแรก</button>`;
+    }
+
+    function sel(id) {
+      return `<select id="${id}">`
+        + players.map(p => `<option>${p}</option>`).join("")
+        + `</select>`;
+    }
+
+    function resetGame() {
+      victim = "";
+      guard = "";
+      confess = {};
+      i = 0;
+      witch();
+    }
+
+    setup();
+  </script>
+</body>
+
+</html>
