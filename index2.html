@@ -50,7 +50,7 @@
         + `<br>`
         + `<button onclick="victim=document.getElementById('v').value;guardPage()">ยืนยัน</button>`;
     }
-
+    
     function guardPage() {
       app.innerHTML = `<h3>😇สายตรวจเลือกปกป้อง😇</h3>`
         + sel("g")
@@ -59,26 +59,17 @@
     }
 
     function confessPage() {
-      if (i >= players.length) {
-        return result();
-      }
-      let p = players[i];
-      app.innerHTML = `<h3>ส่งมือถือให้ ${p}</h3>`
-        + `<button onclick="save(true)">🙏 สารภาพ</button>`
-        + `<button onclick="save(false)">❌ ไม่สารภาพ</button>`;
+      let text = "😇 คืนนี้ผู้ถูกปกป้อง คือ "+ guard ;
+      app.innerHTML = `<h3> คืนนี้ผู้ถูกปกป้อง คือ "${guard}" </h3>`
+       + `<h3>ขั้นตอนสารภาพบาป... </h3>`
+        + `<button onclick="result()">เปิดชื่อผู้ถูกสังหาร💀 </button>`;
+       
     }
 
-    function save(v) {
-      confess[players[i]] = v;
-      i++;
-      confessPage();
-    }
-
+ 
     function result() {
-      let text = "คืนนี้ไม่มีผู้เสียชีวิต";
-      if (victim !== guard && confess[victim] === false) {
-        text = "💀 " + victim + " เสียชีวิต";
-      }
+      let text = "💀 คืนนี้ผู้ถูกสังหาร คือ " + victim ;
+      
       app.innerHTML = `<h2>${text}</h2>`
         + `<button onclick="resetGame()">เริ่มคืนใหม่</button>`
         + `<button onclick="setup()">กลับหน้าแรก</button>`;
